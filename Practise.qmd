@@ -1,0 +1,78 @@
+---
+title: "Practise"
+format: html
+---
+
+```{r}
+library(tidyverse)
+Sales <- tibble(
+                variety = c("Mountain", "Crystal", "Ripe"),
+                color = c("Green","Pale","Orange"),
+                kg = c(7, 3, 8),
+                price_per_kg = c(12, 8, 20),
+                Date = "25-12-2025"
+)
+Sales
+```
+
+```{r}
+Sales2 <- tibble(
+                 variety = c("Mountain", "Crystal", "Ripe"),
+                 color = c("Green","Pale","Orange"),
+                 kg = c(15, 13, 28),
+                 price_per_kg = c(26, 35, 70),
+                 Date = "26-12-2025"
+)
+Sales <- bind_rows(Sales, Sales2)
+write_csv(Sales, "~/Desktop/Sales.csv")
+```
+
+```{r - Dummy Variables}
+Sales$color_Green <- ifelse (Sales$color == "Green", 1, 0)
+Sales$color_Pale <- ifelse (Sales$color == "Pale", 1, 0)
+Sales$color_Orange <- ifelse (Sales$color == "Orange", 1, 0)
+Sales$color <- NULL
+Sales[, c("variety", "color_Green" , "color_Pale" , "color_Orange")]
+```
+
+```{r}
+Sales$Revenue <- Sales$kg * Sales$price_per_kg
+Sales <- Sales[, c("variety", "Revenue")] # Doesnt format and display entire sales
+Sales <- Sales[order(- Sales$Revenue),]
+print(Sales)
+```
+
+```{r - arraning in descendng order with Piping |>}
+library(dplyr)
+Sales <- read_csv("~/Desktop/Sales.csv")
+Sales |>
+mutate(revenue = kg * price_per_kg) |>
+select(variety, revenue) |>
+arrange(desc(revenue))
+```
+
+```{r - Creating dummy data for work}
+Peach_weights <- tibble(
+                        variety = sample(c("Mountain", "Crystal", "Ripe"), 100, replace = TRUE),
+                        weight = runif(100, 0.5, 1.5)
+)
+head(Peach_weights)
+```
+
+```{r}
+Peach_weights |>
+group_by(weight)
+summarise(
+    count= n(),
+    total_weight = sum(weight),
+    mean_weight = mean(weight)
+)
+```
+
+Exercise from Tabular Data:\
+
+```{r}
+
+```
+
+\
